@@ -1,0 +1,41 @@
+{% extends "blog/base.html" %}
+{% block content %}
+    {% for food in food %}
+        <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{ food.food_image }}">
+          <div class="media-body">
+            <h2><a class="article-title" href="{% url 'food-detail' food.id %}">{{ food.food_name }}</a></h2>
+            <p class="article-content">{{ food.description }}</p>
+              <p class="article-content">{{ food.calories }}</p>
+              <p class="article-content">{{ food.fat }}</p>
+              <p class="article-content">{{ food.proteins }}</p>
+              <p class="article-content">{{ food.carbohydrates }}</p>
+              <p class="article-content">{{ food.glycemic_index }}</p>
+          </div>
+        </article>
+    {% endfor %}
+    <div class="pagination justify-content-center">
+    {% if is_paginated %}
+
+      {% if page_obj.has_previous %}
+
+        <a class="btn btn-outline-info mb-4 mr-1" href="?page=1">Первая</a>
+        <a class="btn btn-outline-info mb-4 mr-1" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a class="btn btn-info mb-4 mr-1" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a class="btn btn-outline-info mb-4 mr-1" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline-info mb-4 mr-1" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+        <a class="btn btn-outline-info mb-4 mr-1" href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+      {% endif %}
+
+    {% endif %}
+  </div>
+{% endblock content %}
